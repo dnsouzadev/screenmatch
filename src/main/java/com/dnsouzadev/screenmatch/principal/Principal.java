@@ -5,6 +5,7 @@ import com.dnsouzadev.screenmatch.service.ConsumoAPI;
 import com.dnsouzadev.screenmatch.service.ConverteDados;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import com.dnsouzadev.screenmatch.service.ConsumoAPI;
 import com.dnsouzadev.screenmatch.service.ConverteDados;
@@ -12,6 +13,7 @@ import com.dnsouzadev.screenmatch.model.DadosEpisodio;
 import com.dnsouzadev.screenmatch.model.DadosSerie;
 import com.dnsouzadev.screenmatch.model.DadosTemporada;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Principal {
     private final Scanner leitura = new Scanner(System.in);
@@ -40,6 +42,16 @@ public class Principal {
 		temporadas.forEach(System.out::println);
 
         temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo())));
+
+        List<DadosEpisodio> dadosEpisodios = temporadas.stream()
+                .flatMap(t -> t.episodios().stream())
+                .toList();
+
+        dadosEpisodios.stream()
+                .filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
+                .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
+                .limit(5)
+                .forEach(System.out::println);
 
     }
 }
