@@ -1,6 +1,6 @@
 package com.dnsouzadev.screenmatch.principal;
 
-import com.dnsouzadev.screenmatch.model.DadosSerie;
+import com.dnsouzadev.screenmatch.model.*;
 import com.dnsouzadev.screenmatch.service.ConsumoAPI;
 import com.dnsouzadev.screenmatch.service.ConverteDados;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -9,9 +9,8 @@ import java.util.Comparator;
 import java.util.List;
 import com.dnsouzadev.screenmatch.service.ConsumoAPI;
 import com.dnsouzadev.screenmatch.service.ConverteDados;
-import com.dnsouzadev.screenmatch.model.DadosEpisodio;
 import com.dnsouzadev.screenmatch.model.DadosSerie;
-import com.dnsouzadev.screenmatch.model.DadosTemporada;
+
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -46,12 +45,18 @@ public class Principal {
         List<DadosEpisodio> dadosEpisodios = temporadas.stream()
                 .flatMap(t -> t.episodios().stream())
                 .toList();
-
+        System.out.println("Top 5 episodios");
         dadosEpisodios.stream()
                 .filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
                 .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
                 .limit(5)
                 .forEach(System.out::println);
 
+        List<Episodio> episodios = temporadas.stream()
+                .flatMap(t -> t.episodios().stream()
+                    .map(d -> new Episodio(t.numero(), d))
+                ).toList();
+
+        episodios.forEach(System.out::println);
     }
 }
