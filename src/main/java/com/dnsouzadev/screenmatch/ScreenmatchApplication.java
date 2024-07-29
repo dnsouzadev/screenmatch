@@ -1,5 +1,6 @@
 package com.dnsouzadev.screenmatch;
 
+import com.dnsouzadev.screenmatch.model.DadosEpisodio;
 import com.dnsouzadev.screenmatch.model.DadosSerie;
 import com.dnsouzadev.screenmatch.service.ConsumoAPI;
 import com.dnsouzadev.screenmatch.service.ConverteDados;
@@ -23,5 +24,8 @@ public class ScreenmatchApplication implements CommandLineRunner {
 		ConverteDados conversor = new ConverteDados();
 		DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
 		System.out.println(dados);
+		json = consumoAPI.obterDados("https://omdbapi.com/?t=supernatural&season=15&episode=4&apikey=99277d5");
+		DadosEpisodio dadosEpisodio = conversor.obterDados(json, DadosEpisodio.class);
+		System.out.println(dadosEpisodio);
 	}
 }
