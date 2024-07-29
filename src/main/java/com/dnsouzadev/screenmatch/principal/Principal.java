@@ -4,6 +4,8 @@ import com.dnsouzadev.screenmatch.model.*;
 import com.dnsouzadev.screenmatch.service.ConsumoAPI;
 import com.dnsouzadev.screenmatch.service.ConverteDados;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -58,5 +60,21 @@ public class Principal {
                 ).toList();
 
         episodios.forEach(System.out::println);
+
+        System.out.println("A partir de qual ano deseja ver os episodios?");
+        var ano = leitura.nextInt();
+        leitura.nextLine();
+
+        episodios.stream()
+                .filter(e -> e.getDataLancamento() != null && e.getDataLancamento().isAfter(LocalDate.of(ano, 1, 1)))
+                .forEach(
+                        e -> System.out.println(
+                                "Temporada: " + e.getTemporada() +
+                                        " Episodio: " + e.getNumeroEpisodio() +
+                                        " Titulo: " + e.getTitulo() +
+                                        " Avaliacao: " + e.getAvaliacao() +
+                                        " Data de Lancamento: " + e.getDataLancamento().format(Episodio.FORMATO_DATA)
+                        )
+                );
     }
 }

@@ -1,9 +1,11 @@
 package com.dnsouzadev.screenmatch.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class Episodio {
+    public static final DateTimeFormatter FORMATO_DATA = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private Integer temporada;
     private String titulo;
     private Integer numeroEpisodio;
