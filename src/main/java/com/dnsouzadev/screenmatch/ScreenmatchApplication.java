@@ -1,5 +1,6 @@
 package com.dnsouzadev.screenmatch;
 
+import com.dnsouzadev.screenmatch.service.ConsumoAPI;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +14,8 @@ public class ScreenmatchApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println("Hello World!");
+		var consumoAPI = new ConsumoAPI();
+		var json = consumoAPI.obterDados("https://omdbapi.com/?t=supernatural&season=15&apikey=99277d5");
+		System.out.println(json);
 	}
 }
