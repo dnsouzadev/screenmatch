@@ -6,6 +6,7 @@ import com.dnsouzadev.screenmatch.service.ConsumoAPI;
 import com.dnsouzadev.screenmatch.model.DadosSerie;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 
@@ -57,7 +58,14 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas() {
-        dadosSeries.forEach(System.out::println);
+        List<Serie> series = new ArrayList<>();
+        series = dadosSeries.stream()
+                .map(Serie::new)
+                        .toList();
+        series.stream()
+                .sorted(Comparator.comparing(Serie::getGenero))
+                .forEach(System.out::println);
+
     }
 
     private void buscarSerieWeb() throws JsonProcessingException {
