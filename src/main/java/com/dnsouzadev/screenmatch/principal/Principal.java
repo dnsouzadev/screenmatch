@@ -1,6 +1,7 @@
 package com.dnsouzadev.screenmatch.principal;
 
 import com.dnsouzadev.screenmatch.model.*;
+import com.dnsouzadev.screenmatch.repository.SerieRepository;
 import com.dnsouzadev.screenmatch.service.ConverteDados;
 import com.dnsouzadev.screenmatch.service.ConsumoAPI;
 import com.dnsouzadev.screenmatch.model.DadosSerie;
@@ -16,12 +17,19 @@ import java.util.Scanner;
 
 public class Principal {
 
+    private SerieRepository repository;
+
     private Scanner leitura = new Scanner(System.in);
     private ConsumoAPI consumo = new ConsumoAPI();
     private ConverteDados conversor = new ConverteDados();
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=6585022c";
     private List<DadosSerie> dadosSeries = new ArrayList<>();
+
+
+    public Principal(SerieRepository repository) {
+        this.repository = repository;
+    }
 
     public void exibeMenu() throws JsonProcessingException {
         var opcao = -1;
@@ -58,10 +66,7 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas() {
-        List<Serie> series = new ArrayList<>();
-        series = dadosSeries.stream()
-                .map(Serie::new)
-                        .toList();
+        List<Serie> series = repository.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
@@ -70,7 +75,8 @@ public class Principal {
 
     private void buscarSerieWeb() throws JsonProcessingException {
         DadosSerie dados = getDadosSerie();
-        dadosSeries.add(dados);
+        Serie serie = new Serie(dados);
+        repository.save(serie);
         System.out.println(dados);
     }
 
