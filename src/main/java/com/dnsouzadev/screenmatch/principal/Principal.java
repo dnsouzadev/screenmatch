@@ -34,7 +34,7 @@ public class Principal {
                     1 - Buscar séries
                     2 - Buscar episódios
                     3 - Listar series buscadas
-                                    
+                    4 - Buscar serie por titulo
                     0 - Sair                                 
                     """;
 
@@ -52,12 +52,28 @@ public class Principal {
                 case 3:
                     listarSeriesBuscadas();
                     break;
+                case 4:
+                    buscarSeriePorTitulo();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
                 default:
                     System.out.println("Opção inválida");
             }
+        }
+    }
+
+    private void buscarSeriePorTitulo() {
+        listarSeriesBuscadas();
+        System.out.println("Digite o nome da série para busca: ");
+        var nomeSerie = leitura.nextLine();
+
+        Optional<Serie> serie = repository.findByTituloContainingIgnoreCase(nomeSerie);
+        if (serie.isPresent()) {
+            System.out.println("Dados da serie: " + serie.get());
+        } else {
+            System.out.println("Série não encontrada");
         }
     }
 
@@ -80,8 +96,7 @@ public class Principal {
         System.out.println("Digite o nome da série para busca");
         var nomeSerie = leitura.nextLine();
         var json = consumo.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
-        DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
-        return dados;
+        return conversor.obterDados(json, DadosSerie.class);
     }
 
     private void buscarEpisodioPorSerie() throws JsonProcessingException {
@@ -89,9 +104,7 @@ public class Principal {
         System.out.println("Digite o nome da série para busca: ");
         var nomeSerie = leitura.nextLine();
 
-        Optional<Serie> serie = series.stream()
-                .filter(s -> s.getTitulo().toLowerCase().contains(nomeSerie.toLowerCase()))
-                .findFirst();
+        Optional<Serie> serie = repository.findByTituloContainingIgnoreCase(nomeSerie);
 
         if (serie.isEmpty()) {
             System.out.println("Série não encontrada");
